@@ -1,0 +1,61 @@
+@model List<Wedding>
+
+<h1>Welcome to the Wedding Planner</h1>
+<a asp-controller="Guest" asp-action="Logout">Logout</a>
+
+<table class="table">
+    <th>
+        <tr>
+            <td>Wedding</td>
+            <td>Date</td>
+            <td>Guest</td>
+            <td>Action</td>
+        </tr>
+    </th>
+    @foreach (Wedding wed in Model)
+    {
+        <tbody>
+            <tr>
+                <td><a asp-controller="Wedding" 
+                asp-action="WeddingDetail"
+                asp-route-wId="@wed.WeddingId">
+                @wed.WedderOne + @wed.WedderTwo</a></td>
+                <td>@wed.Date.ToString("MMM d, yyy")</td>
+                <td>@wed.Guests.Count</td>
+                @if(@wed.GuestId == Context.Session.GetInt32("UUID"))
+                {
+                    //make into form-button
+                    <td><form asp-controller="Wedding"
+                    asp-action="Delete"
+                    asp-route-wId="@wed.WeddingId">
+                    <button>Delete</button></form></td>
+                }
+                else if(wed.Guests.Any(wed=>wed.GuestId == Context.Session.GetInt32("UUID"))){
+                    <td><form asp-controller="Wedding"
+                    asp-action="UNRSVP"
+                    asp-route-wId="@wed.WeddingId"
+                    method="POST">
+                    <button>Un-RSVP</button></form></td>
+                }else{
+                    <td><form asp-controller="Wedding"
+                    asp-action="RSVP"
+                    asp-route-wId="@wed.WeddingId"
+                    method="POST">
+                    <button>RSVP</button></form></td>
+                }
+
+                @* 
+                -need to do sort of if and else if? to display
+                the proper link to click
+                -switch to proper link once one is selected
+                -make proper changes in relationshp upon selection
+                -maybe written as an action in the controller?
+                 *@
+            </tr>
+        </tbody>
+    }
+
+</table>
+
+
+<a asp-controller="Wedding" asp-action="WeddingForm" class="btn btn-primary">New Wedding</a>   

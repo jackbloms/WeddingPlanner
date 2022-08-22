@@ -1,0 +1,20 @@
+@model Wedding
+
+<h1>@Model.WedderOne and @Model.WedderTwo's Wedding</h1>
+
+<a asp-controller="Guest" asp-action="Dashboard" class="btn btn-primary">Dashboard</a>
+<a asp-controller="Guest" asp-action="Logout">Logout</a>
+
+<h3>Date: @Model.Date.ToString("MMM d, yyy")</h3>
+
+<h3>Guests:</h3>
+@foreach (Association a in Model.Guests)
+{
+    <p>@a.Guest.FirstName</p>
+}
+
+@* 
+-foreach to display guests names who will be attending said 
+wedding...will likely need .includes statements and 
+.thenIncludes statements in the controller
+ *@
